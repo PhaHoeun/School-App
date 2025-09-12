@@ -10,14 +10,19 @@ class WrapperProvider {
   static List<SingleChildWidget> wrapperList = [
     ChangeNotifierProvider(create: (_) => HomeProvider()),
     ChangeNotifierProvider(create: (_) => AuthProvider()),
+
+    // ApiBaseHelper depends on AuthProvider
     ProxyProvider<AuthProvider, ApiBaseHelper>(
       update: (_, auth, __) => ApiBaseHelper(auth),
     ),
-    // ProxyProvider<ApiBaseHelper, AuthProvider>(
-    //   update: (_, api, auth) {
-    //     auth!.api = api;
-    //     return auth;
-    //   },
-    // ),
+
+    // Inject ApiBaseHelper into AuthProvider safely
+    ChangeNotifierProxyProvider<ApiBaseHelper, AuthProvider>(
+      create: (_) => AuthProvider(),
+      update: (_, api, auth) {
+        auth!.api = api;
+        return auth;
+      },
+    ),
   ];
 }

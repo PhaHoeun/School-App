@@ -9,8 +9,7 @@ import 'package:school_app/cores/auth/widget/animations.dart';
 import 'package:school_app/cores/auth/widget/bg_data.dart';
 import 'package:school_app/cores/auth/widget/text_utils.dart';
 import 'package:school_app/utils/widget/custom_loading.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:school_app/utils/widget/customer_alert_response.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -156,6 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             child: TextFormField(
                               style: const TextStyle(color: Colors.white),
+                              cursorColor: Colors.white,
                               decoration: const InputDecoration(
                                 suffixIcon: Icon(
                                   Icons.person,
@@ -181,6 +181,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             child: TextFormField(
                               style: const TextStyle(color: Colors.white),
+                              cursorColor: Colors.white,
+                              obscureText: true,
                               decoration: const InputDecoration(
                                 suffixIcon: Icon(
                                   Icons.lock,
@@ -218,48 +220,28 @@ class _LoginScreenState extends State<LoginScreen> {
                                       .read<AuthProvider>()
                                       .password
                                       .isEmpty) {
-                                showTopSnackBar(
-                                  Overlay.of(context),
-                                  curve: Curves.ease,
-                                  animationDuration: const Duration(
-                                    milliseconds: 800,
-                                  ),
-                                  CustomSnackBar.error(
-                                    message:
-                                        "Username and Password is required!",
-                                  ),
+                                CustomerAlertResponse.showError(
+                                  context,
+                                  message: "Username and Password is required!",
                                 );
                               } else if (context
                                   .read<AuthProvider>()
                                   .username
                                   .isEmpty) {
-                                showTopSnackBar(
-                                  Overlay.of(context),
-                                  curve: Curves.ease,
-                                  animationDuration: const Duration(
-                                    milliseconds: 800,
-                                  ),
-                                  CustomSnackBar.error(
-                                    message: "Username is required!",
-                                  ),
+                                CustomerAlertResponse.showError(
+                                  context,
+                                  message: "Username is required!",
                                 );
                               } else if (context
                                   .read<AuthProvider>()
                                   .password
                                   .isEmpty) {
-                                showTopSnackBar(
-                                  Overlay.of(context),
-                                  curve: Curves.ease,
-                                  animationDuration: const Duration(
-                                    milliseconds: 800,
-                                  ),
-                                  CustomSnackBar.error(
-                                    message: "Password is required!",
-                                  ),
+                                CustomerAlertResponse.showError(
+                                  context,
+                                  message: "Password is required!",
                                 );
                               } else {
                                 context.read<AuthProvider>().onLogIn(context);
-                                debugPrint('log in--------->>>');
                               }
                             },
                             child: Container(
@@ -286,10 +268,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                   weight: true,
                                 ),
                                 Gap(5),
-                                TextUtil(
-                                  text: "REGISTER",
-                                  size: 12,
-                                  weight: true,
+                                GestureDetector(
+                                  onTap: () {},
+                                  child: TextUtil(
+                                    text: "REGISTER",
+                                    size: 12,
+                                    weight: true,
+                                  ),
                                 ),
                               ],
                             ),
