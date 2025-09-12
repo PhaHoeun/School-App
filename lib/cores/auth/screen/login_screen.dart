@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:school_app/cores/auth/auth_provider/auth_provider.dart';
-import 'package:school_app/cores/auth/screen/widget/animations.dart';
-import 'package:school_app/cores/auth/screen/widget/bg_data.dart';
-import 'package:school_app/cores/auth/screen/widget/text_utils.dart';
+import 'package:school_app/cores/auth/widget/animations.dart';
+import 'package:school_app/cores/auth/widget/bg_data.dart';
+import 'package:school_app/cores/auth/widget/text_utils.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
