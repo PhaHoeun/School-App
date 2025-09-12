@@ -8,6 +8,8 @@ import 'package:school_app/cores/auth/auth_provider/auth_provider.dart';
 import 'package:school_app/cores/auth/widget/animations.dart';
 import 'package:school_app/cores/auth/widget/bg_data.dart';
 import 'package:school_app/cores/auth/widget/text_utils.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -30,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
               margin: const EdgeInsets.symmetric(vertical: 10),
               height: 49,
               width: double.infinity,
-          
+
               child: Row(
                 children: [
                   Expanded(
@@ -50,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                   child: CircleAvatar(
                                     radius: 30,
-          
+
                                     backgroundColor: selectedIndex == index
                                         ? Colors.white
                                         : Colors.transparent,
@@ -58,7 +60,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       padding: const EdgeInsets.all(1),
                                       child: CircleAvatar(
                                         radius: 30,
-                                        backgroundImage: AssetImage(bgList[index]),
+                                        backgroundImage: AssetImage(
+                                          bgList[index],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -94,7 +98,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               padding: const EdgeInsets.all(1),
                               child: CircleAvatar(
                                 radius: 30,
-                                backgroundImage: AssetImage(bgList[selectedIndex]),
+                                backgroundImage: AssetImage(
+                                  bgList[selectedIndex],
+                                ),
                               ),
                             ),
                           ),
@@ -132,7 +138,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           const Spacer(),
                           Center(
-                            child: TextUtil(text: "Log In", weight: true, size: 30),
+                            child: TextUtil(
+                              text: "Log In",
+                              weight: true,
+                              size: 30,
+                            ),
                           ),
                           const Spacer(),
                           TextUtil(text: "Username"),
@@ -146,7 +156,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: TextFormField(
                               style: const TextStyle(color: Colors.white),
                               decoration: const InputDecoration(
-                                suffixIcon: Icon(Icons.person, color: Colors.white),
+                                suffixIcon: Icon(
+                                  Icons.person,
+                                  color: Colors.white,
+                                ),
                                 fillColor: Colors.white,
                                 border: InputBorder.none,
                               ),
@@ -168,7 +181,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: TextFormField(
                               style: const TextStyle(color: Colors.white),
                               decoration: const InputDecoration(
-                                suffixIcon: Icon(Icons.lock, color: Colors.white),
+                                suffixIcon: Icon(
+                                  Icons.lock,
+                                  color: Colors.white,
+                                ),
                                 fillColor: Colors.white,
                                 border: InputBorder.none,
                               ),
@@ -193,7 +209,58 @@ class _LoginScreenState extends State<LoginScreen> {
                           const Spacer(),
                           GestureDetector(
                             onTap: () {
-                              context.read<AuthProvider>().onLogIn();
+                              if (context
+                                      .read<AuthProvider>()
+                                      .username
+                                      .isEmpty &&
+                                  context
+                                      .read<AuthProvider>()
+                                      .password
+                                      .isEmpty) {
+                                showTopSnackBar(
+                                  Overlay.of(context),
+                                  curve: Curves.ease,
+                                  animationDuration: const Duration(
+                                    milliseconds: 800,
+                                  ),
+
+                                  CustomSnackBar.error(
+                                    message:
+                                        "Username and Password is required!",
+                                  ),
+                                );
+                              } else if (context
+                                  .read<AuthProvider>()
+                                  .username
+                                  .isEmpty) {
+                                showTopSnackBar(
+                                  Overlay.of(context),
+                                  curve: Curves.ease,
+                                  animationDuration: const Duration(
+                                    milliseconds: 800,
+                                  ),
+                                  CustomSnackBar.error(
+                                    message: "Username is required!",
+                                  ),
+                                );
+                              } else if (context
+                                  .read<AuthProvider>()
+                                  .password
+                                  .isEmpty) {
+                                showTopSnackBar(
+                                  Overlay.of(context),
+                                  curve: Curves.ease,
+                                  animationDuration: const Duration(
+                                    milliseconds: 800,
+                                  ),
+                                  CustomSnackBar.error(
+                                    message: "Password is required!",
+                                  ),
+                                );
+                              } else {
+                                // context.read<AuthProvider>().onLogIn();
+                                debugPrint('log in--------->>>');
+                              }
                             },
                             child: Container(
                               height: 40,
@@ -203,7 +270,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               alignment: Alignment.center,
-                              child: TextUtil(text: "Log In", color: Colors.black),
+                              child: TextUtil(
+                                text: "Log In",
+                                color: Colors.black,
+                              ),
                             ),
                           ),
                           const Spacer(),
@@ -216,7 +286,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   weight: true,
                                 ),
                                 Gap(5),
-                                TextUtil(text: "REGISTER", size: 12, weight: true),
+                                TextUtil(
+                                  text: "REGISTER",
+                                  size: 12,
+                                  weight: true,
+                                ),
                               ],
                             ),
                           ),
