@@ -20,7 +20,7 @@ class WrapperProvider {
     ChangeNotifierProxyProvider<ApiBaseHelper, AuthProvider>(
       create: (_) => AuthProvider(),
       update: (_, api, auth) {
-        auth!.api = api;
+        auth!.setApi(api);
         return auth;
       },
     ),

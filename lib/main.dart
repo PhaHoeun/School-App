@@ -4,18 +4,15 @@ import 'package:provider/provider.dart';
 import 'package:school_app/configs/router/routes.dart';
 import 'package:school_app/configs/theme/theme.dart';
 import 'package:school_app/constrants/wrapper_provider.dart';
+import 'package:school_app/utils/helper/local_storage.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await LocalStorage.init();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((
     _,
   ) {
-    runApp(
-      MultiProvider(
-        providers: WrapperProvider.wrapperList,
-        child: const MyApp(),
-      ),
-    );
+    runApp(const MyApp());
   });
 }
 
@@ -28,24 +25,27 @@ class MyApp extends StatelessWidget {
       onTap: () {
         unFocus(context);
       },
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        routeInformationProvider: router.routeInformationProvider,
-        routeInformationParser: router.routeInformationParser,
-        routerDelegate: router.routerDelegate,
-        theme: lightTheme(),
-        themeMode: ThemeMode.light,
-        builder: (context, child) {
-          final mediaQueryData = MediaQuery.of(context);
-          final scale = mediaQueryData.textScaler.clamp(
-            minScaleFactor: 0.9,
-            maxScaleFactor: 0.9,
-          );
-          return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaler: scale),
-            child: child!,
-          );
-        },
+      child: MultiProvider(
+        providers: WrapperProvider.wrapperList,
+        child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          routeInformationProvider: router.routeInformationProvider,
+          routeInformationParser: router.routeInformationParser,
+          routerDelegate: router.routerDelegate,
+          theme: lightTheme(),
+          themeMode: ThemeMode.light,
+          builder: (context, child) {
+            final mediaQueryData = MediaQuery.of(context);
+            final scale = mediaQueryData.textScaler.clamp(
+              minScaleFactor: 0.9,
+              maxScaleFactor: 0.9,
+            );
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaler: scale),
+              child: child!,
+            );
+          },
+        ),
       ),
     );
   }

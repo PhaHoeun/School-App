@@ -14,13 +14,13 @@ class LocalStorage {
 
   static Future<void> storeData({String? key, dynamic value}) async {
     if (value.runtimeType == String) {
-      await _prefs!.setString(key!, value);
+      await _prefs?.setString(key!, value);
     } else if (value.runtimeType == int) {
-      await _prefs!.setInt(key!, value);
+      await _prefs?.setInt(key!, value);
     } else if (value.runtimeType == bool) {
-      await _prefs!.setBool(key!, value);
+      await _prefs?.setBool(key!, value);
     } else if (value.runtimeType == double) {
-      await _prefs!.setDouble(key!, value);
+      await _prefs?.setDouble(key!, value);
     } else {
       _prefs!.setStringList(key!, value);
     }
@@ -29,27 +29,29 @@ class LocalStorage {
   // function for get data from local storage
 
   static Future<int> getIntValue({String? key}) async {
-    return (_prefs!.getInt(key!) ?? 0);
+    return (_prefs?.getInt(key!) ?? 0);
   }
 
-  static Future<String> getStringValue(
-      {String? key, String defaultValue = ''}) async {
-    return (_prefs!.getString(key!) ?? defaultValue);
+  static Future<String> getStringValue({
+    String? key,
+    String defaultValue = '',
+  }) async {
+    return (_prefs?.getString(key!) ?? defaultValue);
   }
 
   static Future<List<String>> getStringListValue({String? key}) async {
-    return (_prefs!.getStringList(key!) ?? <String>[]);
+    return (_prefs?.getStringList(key!) ?? <String>[]);
   }
 
   static Future<bool> getBooleanValue({String? key}) async {
-    return (_prefs!.getBool(key!) ?? false);
+    return (_prefs?.getBool(key!) ?? false);
   }
 
   static Future<double> getDoubleValue({String? key}) async {
-    return (_prefs!.getDouble(key!) ?? 0.0);
+    return (_prefs?.getDouble(key!) ?? 0.0);
   }
 
   static removeKey({String? key}) async {
-    await _prefs!.remove(key!);
+    await _prefs?.remove(key!);
   }
 }

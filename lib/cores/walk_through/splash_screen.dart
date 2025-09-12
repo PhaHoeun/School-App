@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:school_app/configs/router/routes.dart';
+import 'package:school_app/cores/auth/auth_provider/auth_provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -12,13 +14,15 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    init();
     super.initState();
-  }
-
-  init() {
-    Future.delayed(Duration(milliseconds: 2500), () {
-      router.go('/log-in');
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final auth = context.read<AuthProvider>();
+      await auth.initAuth();
+      if (auth.token.isNotEmpty) {
+        auth.onGetUser(context);
+      } else {
+        router.go('/log-in');
+      }
     });
   }
 

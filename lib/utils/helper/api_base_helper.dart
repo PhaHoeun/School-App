@@ -14,19 +14,21 @@ class ErrorModel {
 enum METHODE { get, post, delete, update }
 
 class ApiBaseHelper {
-  final AuthProvider authProvider;
+  final AuthProvider authProvider; // always points to AuthProvider
   final Duration timeout = const Duration(seconds: 90);
   String? baseurl = ApiService.baseUrl;
 
   ApiBaseHelper(this.authProvider);
 
-  Future<Map<String, String>> headerDefault({bool isAuthorize = true}) async {
-    final token = authProvider.token;
-
+  /// Always reads the latest token from authProvider
+  Future<Map<String, String>> headerDefault({
+    bool isAuthorize = true,
+    String token = '',
+  }) async {
     return {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      if (isAuthorize && token != '') 'Authorization': token,
+      if (isAuthorize && token.isNotEmpty) 'Authorization': token,
     };
   }
 
@@ -37,15 +39,18 @@ class ApiBaseHelper {
     required METHODE methode,
     bool isAuthorize = true,
     String otherBaseUrl = '',
+    String token = '',
     bool isRouteToLoginWhen401or403 = true,
   }) async {
     final fullUrl = otherBaseUrl.isEmpty ? "$baseurl$url" : "$otherBaseUrl$url";
+    final headerDefault = await this.headerDefault(
+      isAuthorize: isAuthorize,
+      token: token,
+    );
 
-    final headerDefault = await this.headerDefault(isAuthorize: isAuthorize);
+    http.Response response;
 
     try {
-      http.Response response;
-
       switch (methode) {
         case METHODE.get:
           response = await http
@@ -53,11 +58,7 @@ class ApiBaseHelper {
               .timeout(timeout);
           break;
         case METHODE.post:
-          if (body == null) {
-            return Future.error(
-              const ErrorModel(bodyString: 'Body must be included'),
-            );
-          }
+          if (body == null) return Future.error('Body required');
           response = await http
               .post(
                 Uri.parse(fullUrl),
@@ -72,11 +73,7 @@ class ApiBaseHelper {
               .timeout(timeout);
           break;
         case METHODE.update:
-          if (body == null) {
-            return Future.error(
-              const ErrorModel(bodyString: 'Body must be included'),
-            );
-          }
+          if (body == null) return Future.error('Body required');
           response = await http
               .put(
                 Uri.parse(fullUrl),
@@ -105,9 +102,7 @@ class ApiBaseHelper {
     if (statusCode >= 200 && statusCode < 300) {
       return bodyString;
     } else if (statusCode == 401 || statusCode == 403) {
-      if (isRouteToLoginWhen401or403) {
-        authProvider.signOut(); // ✅ automatically logs out
-      }
+      if (isRouteToLoginWhen401or403) authProvider.signOut();
       return Future.error(
         ErrorModel(statusCode: statusCode, bodyString: bodyString),
       );
