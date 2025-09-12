@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:school_app/configs/router/routes.dart';
+import 'package:school_app/configs/theme/theme.dart';
 import 'package:school_app/constrants/wrapper_provider.dart';
-import 'package:school_app/modules/home/screen/home_screen.dart';
 
 void main() {
-  runApp(
-    MultiProvider(providers: WrapperProvider.wrapperList, child: const MyApp()),
-  );
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((
+    _,
+  ) {
+    runApp(
+      MultiProvider(
+        providers: WrapperProvider.wrapperList,
+        child: const MyApp(),
+      ),
+    );
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -14,12 +24,36 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'School App',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+    return GestureDetector(
+      onTap: () {
+        unFocus(context);
+      },
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        routeInformationProvider: router.routeInformationProvider,
+        routeInformationParser: router.routeInformationParser,
+        routerDelegate: router.routerDelegate,
+        theme: lightTheme(),
+        themeMode: ThemeMode.light,
+        builder: (context, child) {
+          final mediaQueryData = MediaQuery.of(context);
+          final scale = mediaQueryData.textScaler.clamp(
+            minScaleFactor: 0.9,
+            maxScaleFactor: 0.9,
+          );
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaler: scale),
+            child: child!,
+          );
+        },
       ),
-      home: HomeScreen(),
     );
+  }
+}
+
+void unFocus(BuildContext context) {
+  final FocusScopeNode currentFocus = FocusScope.of(context);
+  if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+    FocusManager.instance.primaryFocus!.unfocus();
   }
 }
