@@ -3,10 +3,21 @@ import 'package:provider/single_child_widget.dart';
 import 'package:school_app/cores/auth/auth_provider/auth_provider.dart';
 import 'package:school_app/modules/home/provider/home_provider.dart';
 
+import '../utils/helper/api_base_helper.dart';
+
 class WrapperProvider {
   WrapperProvider._();
   static List<SingleChildWidget> wrapperList = [
     ChangeNotifierProvider(create: (_) => HomeProvider()),
     ChangeNotifierProvider(create: (_) => AuthProvider()),
+    ProxyProvider<AuthProvider, ApiBaseHelper>(
+      update: (_, auth, __) => ApiBaseHelper(auth),
+    ),
+    // ProxyProvider<ApiBaseHelper, AuthProvider>(
+    //   update: (_, api, auth) {
+    //     auth!.api = api;
+    //     return auth;
+    //   },
+    // ),
   ];
 }

@@ -8,6 +8,7 @@ import 'package:school_app/cores/auth/auth_provider/auth_provider.dart';
 import 'package:school_app/cores/auth/widget/animations.dart';
 import 'package:school_app/cores/auth/widget/bg_data.dart';
 import 'package:school_app/cores/auth/widget/text_utils.dart';
+import 'package:school_app/utils/widget/custom_loading.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
@@ -192,7 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 context.read<AuthProvider>().password = v;
                               },
                               onFieldSubmitted: (_) {
-                                context.read<AuthProvider>().onLogIn();
+                                context.read<AuthProvider>().onLogIn(context);
                                 Navigator.pop(context);
                               },
                             ),
@@ -223,7 +224,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   animationDuration: const Duration(
                                     milliseconds: 800,
                                   ),
-
                                   CustomSnackBar.error(
                                     message:
                                         "Username and Password is required!",
@@ -258,7 +258,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 );
                               } else {
-                                // context.read<AuthProvider>().onLogIn();
+                                context.read<AuthProvider>().onLogIn(context);
                                 debugPrint('log in--------->>>');
                               }
                             },
@@ -303,6 +303,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
+          if (context.watch<AuthProvider>().isLoadingLogin) CustomLoading(),
         ],
       ),
     );
