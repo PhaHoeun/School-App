@@ -7,10 +7,10 @@ class CustomLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black38,
+      color: Colors.black45,
       child: Center(child: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Lottie.asset('assets/animation/Book Loader.json'),
+        child: Lottie.asset('assets/animation/loading.json'),
       )),
     );
   }
