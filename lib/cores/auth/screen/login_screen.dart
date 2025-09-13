@@ -128,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Colors.black.withValues(alpha: 0.1),
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(15),
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaY: 5, sigmaX: 5),
                     child: Padding(
@@ -248,13 +248,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               height: 40,
                               width: double.infinity,
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: Colors.transparent,
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 1.5,
+                                ),
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               alignment: Alignment.center,
                               child: TextUtil(
                                 text: "Log In",
-                                color: Colors.black,
+                                color: Colors.white,
                               ),
                             ),
                           ),
